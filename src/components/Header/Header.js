@@ -1,15 +1,22 @@
-import { Jumbotron, Button } from "react-bootstrap";
+import { Jumbotron, Button, InputGroup, FormControl } from "react-bootstrap";
+import headerStyles from "./Header.module.css";
 function Header() {
     return (
-        <Jumbotron>
-            <h1>Hello, world!</h1>
-            <p>
-                This is a simple hero unit, a simple jumbotron-style component
-                for calling extra attention to featured content or information.
-            </p>
-            <p>
-                <Button variant="primary">Learn more</Button>
-            </p>
+        <Jumbotron className={headerStyles.jumbotron}>
+            <h1>Welcome!</h1>
+            <p>Here you can search for your favorite meals</p>
+            <div className={headerStyles.inputGroup}>
+                <InputGroup className="mb-3">
+                    <FormControl
+                        placeholder="Search a meal"
+                        aria-label="Recipe"
+                        aria-describedby="basic-addon2"
+                    />
+                    <InputGroup.Append>
+                        <Button variant="primary">Search a meal</Button>
+                    </InputGroup.Append>
+                </InputGroup>
+            </div>
         </Jumbotron>
     );
 }

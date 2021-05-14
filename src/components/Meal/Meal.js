@@ -1,14 +1,14 @@
+import { Card, Button } from "react-bootstrap";
 function Meal({ meal }) {
     return (
-        <div className="singleMeal">
-            <div className="mealImg">
-                <img src={meal.image}></img>
-            </div>
-            <div className="mealContext">
-                <h2>{meal.name}</h2>
-                <p>{meal.instructions}</p>
-            </div>
-        </div>
+        <Card style={{ width: "18rem" }}>
+            <Card.Img variant="top" src={meal.image} />
+            <Card.Body>
+                <Card.Title>{meal.title}</Card.Title>
+                <Card.Text>{meal.description}</Card.Text>
+                <Button variant="primary">See More Details</Button>
+            </Card.Body>
+        </Card>
     );
 }
 
