@@ -4,17 +4,14 @@ import axios from "axios";
 import Navigation from "./components/Navigation/Navigation";
 import About from "./pages/About";
 import Home from "./pages/Home";
-import { Route, BrowserRouter as Router, Link, Switch } from "react-router-dom";
+import Team from "./pages/Team";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 function App() {
     const [meals, setMeals] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(async () => {
-        // const promise = await fetch("https://api.chucknorris.io/jokes/random");
-        // const json = await promise.json();
-        // setLoading(false);
-        // setJoke(json);
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -42,8 +39,17 @@ function App() {
                         strArea: area,
                         strInstructions: instructions,
                         strMealThumb: image,
+                        strCategory: cat,
                     } = meal;
-                    return { id, name, area, instructions, image, ingredients };
+                    return {
+                        id,
+                        name,
+                        cat,
+                        area,
+                        instructions,
+                        image,
+                        ingredients,
+                    };
                 });
                 setMeals(mealsData);
                 setLoading(false);
@@ -61,7 +67,9 @@ function App() {
                     <Route path="/about" exact>
                         <About />
                     </Route>
-                    <About />
+                    <Route path="/team" exact>
+                        <Team />
+                    </Route>
                 </Switch>
             </div>
         </Router>
