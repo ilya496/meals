@@ -5,9 +5,8 @@ export default function Navigation() {
     return (
         <Navbar bg="light" expand="lg">
             <LinkContainer to="/">
-                <Navbar.Brand>Meals</Navbar.Brand>
+                <Navbar.Brand> Meals</Navbar.Brand>
             </LinkContainer>
-
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
@@ -16,6 +15,9 @@ export default function Navigation() {
                     </LinkContainer>
                     <LinkContainer to="/about">
                         <Nav.Link>About</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/login">
+                        <Nav.Link>Login</Nav.Link>
                     </LinkContainer>
                 </Nav>
                 <Form inline>

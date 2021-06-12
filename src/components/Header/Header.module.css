@@ -1,14 +1,13 @@
 .jumbotron {
     height: 500px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)),
         url("../../images/header.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: #fff;
-}
-
-.jumbotron .inputGroup {
-    width: 50%;
-    margin: 0 auto;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

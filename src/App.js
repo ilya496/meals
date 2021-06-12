@@ -1,74 +1,58 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect } from "react";
+import { auth } from "./firebase";
 import Navigation from "./components/Navigation/Navigation";
 import About from "./pages/About";
-import Home from "./pages/Home";
-import Team from "./pages/Team";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import Home from "./pages/Home";
+import ReactPaginate from "react-paginate";
+import { mealsContext } from "./context";
+import Login from "./pages/Login";
 
 function App() {
-    const [meals, setMeals] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { setCurrentPage, pageCount, setCurrentUser, mealsToShow } =
+        useContext(mealsContext);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        auth.onAuthStateChanged((authUser) => {
+            setCurrentUser(authUser);
+        });
+    });
 
-    function extractIngredients(meal) {
-        const ingredients = [];
-        for (let i in meal) {
-            if (i.includes("Ingredient") && meal[i]) {
-                ingredients.push(meal[i]);
-            }
-        }
-        return ingredients;
+    function handlePageClick({ selected }) {
+        setCurrentPage(selected);
     }
 
-    function fetchData() {
-        setLoading(true);
-        axios
-            .get("https://www.themealdb.com/api/json/v1/1/search.php?s=a")
-            .then(({ data }) => {
-                const mealsData = data.meals.map((meal) => {
-                    const ingredients = extractIngredients(meal);
-
-                    const {
-                        idMeal: id,
-                        strMeal: name,
-                        strArea: area,
-                        strInstructions: instructions,
-                        strMealThumb: image,
-                        strCategory: cat,
-                    } = meal;
-                    return {
-                        id,
-                        name,
-                        cat,
-                        area,
-                        instructions,
-                        image,
-                        ingredients,
-                    };
-                });
-                setMeals(mealsData);
-                setLoading(false);
-            })
-            .catch((error) => console.log(error));
-    }
     return (
         <Router>
             <div className="App">
                 <Navigation />
                 <Switch>
                     <Route path="/" exact>
-                        <Home loading={loading} meals={meals} />
+                        <Home meals={mealsToShow} />
+                        <ReactPaginate
+                            previousLabel={"previous"}
+                            nextLabel={"next"}
+                            containerClassName={"pagination"}
+                            previousLinkClassName={"previous-link"}
+                            nextLinkClassName={"next-link"}
+                            pageLinkClassName={"pagination-page-link"}
+                            breakLabel={"..."}
+                            breakClassName={"break-me"}
+                            pageCount={pageCount}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={handlePageClick}
+                            containerClassName={"pagination"}
+                            activeClassName={"page-link-active"}
+                            disabledClassName={"page-link-disabled"}
+                        />
                     </Route>
                     <Route path="/about" exact>
                         <About />
                     </Route>
-                    <Route path="/team" exact>
-                        <Team />
+                    <Route path="/login" exact>
+                        <Login></Login>
                     </Route>
                 </Switch>
             </div>

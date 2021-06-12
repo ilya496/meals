@@ -1,33 +1,44 @@
 import { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
-
+import { FaYoutube } from "react-icons/fa";
 function Meal({ meal }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     return (
         <>
-            <Card style={{ width: "18rem" }}>
+            <Card
+                style={{
+                    width: "18rem",
+                    minWidth: "350px",
+                    margin: "10px auto",
+                }}
+            >
                 <Card.Img variant="top" src={meal.image} />
                 <Card.Body>
                     <Card.Title>{meal.name}</Card.Title>
-                    <Card.Text>
-                        {meal.cat}, {meal.area}
-                    </Card.Text>
-                    <Button variant="danger" onClick={handleShow}>
+                    <p class="badge"> {meal.category}</p> <br />
+                    <Button variant="primary" onClick={handleShow}>
                         See More Details
                     </Button>
                 </Card.Body>
             </Card>
 
-            <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{meal.name}</Modal.Title>
+                    <Modal.Title>Instructions</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {meal.instructions.split(".").map((sentence, idx) => (
                         <p key={idx}>{sentence}</p>
                     ))}
+                    <a
+                        href={meal.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <FaYoutube /> Also you can see video about this meal!
+                    </a>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
