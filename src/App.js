@@ -8,14 +8,25 @@ import Home from "./pages/Home";
 import ReactPaginate from "react-paginate";
 import { mealsContext } from "./context";
 import Login from "./pages/Login";
+import Favorites from "./pages/Favorites";
+import ErrorPage from "./pages/404/ErrorPage";
 
 function App() {
-    const { setCurrentPage, pageCount, setCurrentUser, mealsToShow } =
-        useContext(mealsContext);
+    const {
+        setCurrentPage,
+        pageCount,
+        setCurrentUser,
+        mealsToShow,
+        currentUser,
+    } = useContext(mealsContext);
 
     useEffect(() => {
         auth.onAuthStateChanged((authUser) => {
-            setCurrentUser(authUser);
+            if (authUser) {
+                setCurrentUser(authUser);
+            } else {
+                setCurrentUser(null);
+            }
         });
     });
 
@@ -53,6 +64,14 @@ function App() {
                     </Route>
                     <Route path="/login" exact>
                         <Login></Login>
+                    </Route>
+                    {currentUser && (
+                        <Route path="/:id/favorites" exact>
+                            <Favorites />
+                        </Route>
+                    )}
+                    <Route>
+                        <ErrorPage />
                     </Route>
                 </Switch>
             </div>

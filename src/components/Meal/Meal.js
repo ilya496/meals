@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { FaYoutube } from "react-icons/fa";
+import { db } from "../../firebase";
+import { mealsContext } from "../../context";
+
 function Meal({ meal }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const { currentUser } = useContext(mealsContext);
+
+    const addToFavourites = (e) => {
+        if (currentUser) {
+            db.collection("users")
+                .doc(currentUser.uid)
+                .collection("favorites")
+                .doc(meal.id)
+                .set({
+                    meal,
+                })
+                .then(() => alert("added to collection"));
+        }
+    };
     return (
         <>
             <Card
@@ -44,6 +61,11 @@ function Meal({ meal }) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
+                    {currentUser && (
+                        <Button variant="primary" onClick={addToFavourites}>
+                            Add to Favorites
+                        </Button>
+                    )}
                 </Modal.Footer>
             </Modal>
         </>
