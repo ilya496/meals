@@ -1,19 +1,20 @@
-import { useContext } from "react";
-import { Jumbotron } from "react-bootstrap";
+import { Jumbotron, Button, InputGroup, FormControl } from "react-bootstrap";
 import Search from "../Search/Search";
 import headerStyles from "./Header.module.css";
-import { mealsContext } from "../../context";
+import {MealsContext} from '../../Context'
+import { useContext } from "react";
 
 function Header() {
-    const { setSearchTerm } = useContext(mealsContext);
-    return (
-        <Jumbotron className={headerStyles.jumbotron}>
-            <h1>Welcome!</h1>
-            <p>Here you can search for your favorite meals</p>
+  const {setSearchTerm} = useContext(MealsContext)
 
-            <Search />
-        </Jumbotron>
-    );
+  return (
+    <Jumbotron className={headerStyles.jumbotron}>
+      <h1>Welcome!</h1>
+      <p>Here you can search for your favorite meals</p>
+
+    <Search setSearchTerm={setSearchTerm} />
+    </Jumbotron>
+  );
 }
 
 export default Header;

@@ -1,16 +1,37 @@
 import { useState, useContext } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { FaYoutube } from "react-icons/fa";
+import { MealsContext } from "../../Context";
 import { db } from "../../firebase";
-import { mealsContext } from "../../context";
+import PropTypes from "prop-types";
 
-function Meal({ meal }) {
+function Meal({ meal, isFavorite }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const { currentUser } = useContext(mealsContext);
+    const { currentUser, setShowAlert } = useContext(MealsContext);
 
-    const addToFavourites = (e) => {
+    function removeFromFavorites() {
+        if (currentUser) {
+            db.collection("users")
+                .doc(currentUser.uid)
+                .collection("favorites")
+                .doc(meal.id)
+                .delete()
+                .then(() =>
+                    setShowAlert((prev) => ({
+                        ...prev,
+                        state: true,
+                        msg: `${meal.name} removed successfully`,
+                        variant: "danger",
+                        type: "remove",
+                    }))
+                )
+                .catch((e) => console.log(e));
+        }
+    }
+
+    function addToFavorites() {
         if (currentUser) {
             db.collection("users")
                 .doc(currentUser.uid)
@@ -19,22 +40,31 @@ function Meal({ meal }) {
                 .set({
                     meal,
                 })
-                .then(() => alert("added to collection"));
+                .then(() =>
+                    setShowAlert((prev) => ({
+                        ...prev,
+                        state: true,
+                        msg: `${meal.name} added successfully`,
+                        variant: "success",
+                        type: "add",
+                    }))
+                )
+                .catch((e) => console.log(e));
         }
-    };
+    }
     return (
         <>
             <Card
                 style={{
                     width: "18rem",
-                    minWidth: "350px",
+                    minWidth: "400px",
                     margin: "10px auto",
                 }}
             >
                 <Card.Img variant="top" src={meal.image} />
                 <Card.Body>
                     <Card.Title>{meal.name}</Card.Title>
-                    <p class="badge"> {meal.category}</p> <br />
+                    <p className="badge bg-success"> {meal.category}</p> <br />
                     <Button variant="primary" onClick={handleShow}>
                         See More Details
                     </Button>
@@ -49,23 +79,30 @@ function Meal({ meal }) {
                     {meal.instructions.split(".").map((sentence, idx) => (
                         <p key={idx}>{sentence}</p>
                     ))}
-                    <a
-                        href={meal.youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <FaYoutube /> Also you can see video about this meal!
-                    </a>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    {currentUser && (
-                        <Button variant="primary" onClick={addToFavourites}>
-                            Add to Favorites
+                    {currentUser && !isFavorite && (
+                        <Button variant="primary" onClick={addToFavorites}>
+                            Add To Favorites
                         </Button>
                     )}
+
+                    {currentUser && isFavorite && (
+                        <Button variant="primary" onClick={removeFromFavorites}>
+                            Remove From Favorites
+                        </Button>
+                    )}
+
+                    <a
+                        href={meal.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <FaYoutube />
+                    </a>
                 </Modal.Footer>
             </Modal>
         </>
@@ -73,3 +110,8 @@ function Meal({ meal }) {
 }
 
 export default Meal;
+
+Meal.protTypes = {
+    isFavorite: PropTypes.bool.isRequired,
+    meal: PropTypes.instanceOf(Object).isRequired,
+};

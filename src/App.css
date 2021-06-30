@@ -1,25 +1,29 @@
 .pagination {
-    display: flex;
-    justify-content: space-evenly;
-    max-width: 400px;
-    align-items: center;
-    margin: 0 auto;
-    padding: 25px 0;
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 400px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 50px 0;
 }
 
 .pagination-page-link {
-    padding: 10px;
-    display: block;
-    border-radius: 8px;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
 }
+
 .page-link-active {
-    background-color: cornflowerblue;
-    color: #fff;
+  background: cornflowerblue;
+  border-radius: 8px;
+  text-decoration: none;
+  color: black;
 }
 
 .previous-link,
 .next-link {
-    padding: 5px 10px;
-    background-color: #a7333f;
-    color: #fff;
+  padding: 5px 10px;
+  background: #a7333f;
+  color: white;
+  border-radius: 5px;
 }

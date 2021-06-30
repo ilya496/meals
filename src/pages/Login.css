@@ -1,0 +1,22 @@
+.login-container {
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-inner-container {
+    background: rgb(241, 239, 239);
+    padding: 100px 0;
+}
+
+@media screen and (max-width: 750px) {
+    .login-image-container {
+        display: none;
+    }
+
+    .login-inner-container {
+        width: 85%;
+    }
+}

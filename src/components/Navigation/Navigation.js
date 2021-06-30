@@ -1,16 +1,19 @@
 import "./Navigation.css";
 import { LinkContainer } from "react-router-bootstrap";
 import { useContext } from "react";
-import { mealsContext } from "../../context";
+import { MealsContext } from "../../Context";
 import { auth } from "../../firebase";
-import { Navbar, Form, Nav, FormControl, Button } from "react-bootstrap";
-export default function Navigation() {
-    const { currentUser } = useContext(mealsContext);
+import {
+    NavDropdown,
+    Navbar,
+    Form,
+    Nav,
+    FormControl,
+    Button,
+} from "react-bootstrap";
 
-    function handleLogout(e) {
-        e.preventDefault();
-        auth.signOut();
-    }
+export default function Navigation() {
+    const { currentUser, handleLogout } = useContext(MealsContext);
 
     return (
         <Navbar bg="light" expand="lg">
@@ -20,9 +23,6 @@ export default function Navigation() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <LinkContainer to="/team">
-                        <Nav.Link>Team</Nav.Link>
-                    </LinkContainer>
                     {currentUser && (
                         <LinkContainer to={`/${currentUser.uid}/favorites`}>
                             <Nav.Link>Favorites</Nav.Link>
@@ -31,14 +31,13 @@ export default function Navigation() {
                     <LinkContainer to="/about">
                         <Nav.Link>About</Nav.Link>
                     </LinkContainer>
-
-                    {currentUser ? (
-                        <LinkContainer to="#">
-                            <Nav.Link onClick={handleLogout}>Log out</Nav.Link>
-                        </LinkContainer>
-                    ) : (
+                    {!currentUser ? (
                         <LinkContainer to="/login">
                             <Nav.Link>Login</Nav.Link>
+                        </LinkContainer>
+                    ) : (
+                        <LinkContainer to="#" onClick={handleLogout}>
+                            <Nav.Link>Logout</Nav.Link>
                         </LinkContainer>
                     )}
                 </Nav>
@@ -46,7 +45,9 @@ export default function Navigation() {
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text>
                             Signed in as:{" "}
-                            <span className="fw-700">{currentUser.email}</span>
+                            <span className="font-weight-bold">
+                                {currentUser.email}
+                            </span>
                         </Navbar.Text>
                     </Navbar.Collapse>
                 )}
